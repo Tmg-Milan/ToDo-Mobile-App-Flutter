@@ -8,10 +8,42 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late final List<TaskMenuItem> taskList = [
+    TaskMenuItem(
+      iconData: Icons.task_outlined,
+      title: 'My Tasks',
+      ontab: () {},
+      subtitle: 'View all your tasks',
+    ),
+    TaskMenuItem(
+      iconData: Icons.settings_outlined,
+      title: 'Settings',
+      ontab: () {},
+      subtitle: 'App preferences',
+    ),
+    TaskMenuItem(
+      iconData: Icons.notifications_outlined,
+      title: 'Notifications',
+      ontab: () {},
+      subtitle: 'Manage Notifications',
+    ),
+    TaskMenuItem(
+      iconData: Icons.question_mark_rounded,
+      title: 'Help & Support',
+      ontab: () {},
+      subtitle: 'Get help or send Feedback',
+    ),
+    TaskMenuItem(
+      iconData: Icons.info_outline,
+      title: 'About',
+      ontab: () {},
+      subtitle: 'App version 1.0',
+    ),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 247, 250, 253),
       appBar: AppBar(
         actionsPadding: EdgeInsets.symmetric(horizontal: 15),
         backgroundColor: Colors.transparent,
@@ -77,6 +109,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
+            SizedBox(height: 30),
+            Expanded(
+              child: ListView.separated(
+                separatorBuilder: (_, _) => SizedBox(height: 10),
+                itemCount: taskList.length,
+                itemBuilder: ((context, index) {
+                  final task = taskList[index];
+                  return ReusableTask(
+                    iconData: task.iconData,
+                    title: task.title,
+                    ontab: task.ontab,
+                    subtitle: task.subtitle,
+                  );
+                }),
+              ),
+            ),
           ],
         ),
       ),
@@ -103,6 +151,56 @@ class TaskStateItems extends StatelessWidget {
           style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal),
         ),
       ],
+    );
+  }
+}
+
+//Taskmenuitem Data model
+
+class TaskMenuItem {
+  final IconData iconData;
+  final String title;
+  final String subtitle;
+  final VoidCallback ontab;
+
+  const TaskMenuItem({
+    required this.iconData,
+    required this.title,
+    required this.ontab,
+    required this.subtitle,
+  });
+}
+
+/// Reusable task settings
+class ReusableTask extends StatelessWidget {
+  final IconData iconData;
+  final String title;
+  final String subtitle;
+  final VoidCallback ontab;
+
+  const ReusableTask({
+    super.key,
+    required this.iconData,
+    required this.title,
+    required this.ontab,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      tileColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        // side: BorderSide(color: Colors.black),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      leading: Icon(iconData, size: 30),
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+      ),
+      subtitle: Text(subtitle),
+      trailing: Icon(Icons.arrow_forward_ios, size: 15),
     );
   }
 }

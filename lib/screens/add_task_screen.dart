@@ -18,21 +18,21 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(backgroundColor: Colors.transparent),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Add new Task',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
-            Text('Task Title *'),
+            Text('Task Title *', style: buttonTitleStyle()),
             SizedBox(height: 10),
             TextInputField(),
             SizedBox(height: 20),
 
-            Text('Date'),
+            Text('Date', style: buttonTitleStyle()),
             SizedBox(height: 10),
             DatePicker(
               selectedDate: selectedDate,
@@ -43,7 +43,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               },
             ),
             SizedBox(height: 20),
-            Text('Priority'),
+            Text('Priority', style: buttonTitleStyle()),
             SizedBox(height: 10),
             PriorityCard(
               selected: selected,
@@ -154,7 +154,7 @@ class PriorityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
+    return Row(
       spacing: 20,
       children: prioties.map((priority) {
         final bool isSelected = selected == priority;
@@ -164,11 +164,13 @@ class PriorityCard extends StatelessWidget {
             onValueChanged(priority);
           },
           child: AnimatedContainer(
+            alignment: Alignment.center,
+            height: 40,
             duration: Duration(milliseconds: 500),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: isSelected ? Colors.red : Colors.white,
+              color: isSelected ? Colors.blue : Colors.white,
               border: Border.all(
                 color: isSelected ? Colors.transparent : Colors.black,
               ),
@@ -179,4 +181,10 @@ class PriorityCard extends StatelessWidget {
       }).toList(),
     );
   }
+}
+
+//common texstyle
+
+TextStyle buttonTitleStyle() {
+  return TextStyle(fontWeight: FontWeight.w500, fontSize: 17);
 }

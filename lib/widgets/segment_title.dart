@@ -7,6 +7,15 @@ class SegmentTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [Text(title), Spacer(), Text(subtitle)]);
+    return Row(
+      children: [
+        Text(
+          title,
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+        ),
+        Spacer(),
+        Text(subtitle),
+      ],
+    );
   }
 }

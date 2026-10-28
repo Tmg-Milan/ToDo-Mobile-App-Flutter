@@ -50,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
               priority: 'Low',
               isComplted: isCompleted,
             ),
-            SegmentTitle(title: 'Upcoming', subtitle: '3 tasks'),
+            SizedBox(height: 15),
+            SegmentTitle(title: "Previous", subtitle: '3 tasks'),
           ],
         ),
       ),
@@ -72,14 +73,14 @@ class Greetings extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Good morning'),
+            Text('Good morning,', style: TextStyle(fontSize: 18)),
             Spacer(),
-            InkWell(child: Icon(Icons.notifications_outlined)),
+            InkWell(child: Icon(Icons.notifications_outlined, size: 30)),
           ],
         ),
         Text(
           'Milan',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
         Text(formattedDate),
       ],
@@ -110,7 +111,7 @@ class TaskCard extends StatelessWidget {
       ),
       title: Text("Today's Tasks"),
       subtitle: Text('3 Tasks'),
-      trailing: Icon(Icons.arrow_forward_ios, size: 20),
+      trailing: Icon(Icons.arrow_forward_ios, size: 15),
     );
   }
 }
