@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/models/database_model.dart';
+import 'package:todo_app/providers/todo_provider.dart';
 
 class AddTaskScreen extends StatefulWidget {
   const new({super.key});
@@ -12,8 +15,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   DateTime selectedDate = DateTime.now();
   String selected = 'High';
   List<String> priorities = ['High', 'Medium', 'Low'];
+  TextEditingController controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final todoProvider = Provider.of<TodoProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(backgroundColor: Colors.transparent),
@@ -29,7 +35,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             SizedBox(height: 20),
             Text('Task Title *', style: buttonTitleStyle()),
             SizedBox(height: 10),
-            TextInputField(),
+            TextInputField(controller: controller),
             SizedBox(height: 20),
 
             Text('Date', style: buttonTitleStyle()),
@@ -66,7 +72,17 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     ),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  final data = DatabaseModel(
+                    task: controller.text,
+                    priority: selected,
+                    date: selectedDate,
+                    isCompleted: false,
+                  );
+                  todoProvider.addTask(data);
+                  todoProvider.taskByDate(DateTime.now());
+                  controller.clear();
+                },
                 child: Text(
                   'Save',
                   style: TextStyle(color: Colors.white, fontSize: 20),
@@ -82,11 +98,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
 ///Title input field
 class TextInputField extends StatelessWidget {
-  const new({super.key});
+  final TextEditingController controller;
+  const TextInputField({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       minLines: 1,
       maxLines: 5,
       decoration: InputDecoration(

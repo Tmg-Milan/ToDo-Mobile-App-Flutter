@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/database/db_helper.dart';
+import 'package:todo_app/providers/todo_provider.dart';
 import 'package:todo_app/widgets/segment_title.dart';
 import 'package:todo_app/widgets/todo_tile.dart';
 
@@ -12,47 +15,57 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isCompleted = false;
+
+  DBhelper dBhelper = DBhelper.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<TodoProvider>().taskByDate(DateTime.now());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 247, 250, 253),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Greetings(),
-            SizedBox(height: 10),
-            TaskCard(),
-            SizedBox(height: 20),
-            SegmentTitle(title: 'Today', subtitle: '3 tasks'),
-            SizedBox(height: 10),
-            TodoTile(
-              task: 'Finish project report',
-              date: 'Today',
-              priority: 'High',
-              isComplted: isCompleted,
-              ontap: () {
-                setState(() {
-                  isCompleted = !isCompleted;
-                });
-              },
-            ),
-            TodoTile(
-              task: 'Go to the Gym',
-              date: 'Today',
-              priority: 'Medium',
-              isComplted: isCompleted,
-            ),
-            TodoTile(
-              task: 'Buy Groceries',
-              date: 'Today',
-              priority: 'Low',
-              isComplted: isCompleted,
-            ),
-            SizedBox(height: 15),
-            SegmentTitle(title: "Previous", subtitle: '3 tasks'),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Greetings(),
+              SizedBox(height: 10),
+              TaskCard(),
+              SizedBox(height: 20),
+              SegmentTitle(title: 'Today', subtitle: ' tasks'),
+              SizedBox(height: 10),
+              Consumer<TodoProvider>(
+                builder: (context, todoProvider, child) {
+                  return Column(
+                    children: todoProvider.tasks.map((task) {
+                      return TodoTile(
+                        task: task.task,
+                        date: DateFormat("dd MMM").format(task.date),
+                        priority: task.priority,
+                        isComplted: task.isCompleted,
+                        ontap: () {
+                          if (task.id != null) {
+                            todoProvider.updateRow(task.id!, !task.isCompleted);
+                          }
+                          todoProvider.taskByDate(DateTime.now());
+                        },
+                      );
+                    }).toList(),
+                  );
+                },
+              ),
+              SizedBox(height: 15),
+              SegmentTitle(title: "Previous", subtitle: '3 tasks'),
+            ],
+          ),
         ),
       ),
     );
